@@ -94,7 +94,7 @@ class TanhRNN(nn.Module):
         return logits
     
     def train_model(self, lr=1e-4, batch_size=1024, n_epochs=1e4, n_samples=75, intersample_interval=5, 
-                    print_every=1000, hold_time=179, lambda_w=1e-4, lambda_h=0):#, fixate_coef=0.1, fixate_time=50, ):
+                    print_every=1000, hold_time=179, lambda_w=1e-4, lambda_h=0):
         optimizer = optim.Adam(self.parameters(), lr=lr)
         criterion = nn.BCEWithLogitsLoss()
 
@@ -135,7 +135,7 @@ class TanhRNN(nn.Module):
         print('Training complete. Elapsed time %.2f min'%elapsed_time)
         self.training_results = {'losses': np.array(losses), 'accuracies': np.array(accuracies), 'elapsed_time': elapsed_time,
                          'lr': lr, 'n_epochs': n_epochs, 'n_samples': n_samples, 'intersample_interval': intersample_interval,
-                         'hold_time': hold_time, 'lambda_w': lambda_w, 'lambda_h': lambda_h}#, 'fixate_time': fixate_time, }
+                         'hold_time': hold_time, 'lambda_w': lambda_w, 'lambda_h': lambda_h}
         self.hold_time = hold_time
         self.eval()
     
@@ -262,7 +262,7 @@ class TanhRNN(nn.Module):
         decision_trajs = np.array(decision_trajs)
         return hidden_trajs, decision_trajs, factor_trajs
     
-    def generate_batch(self, batch_size, n_samples=75, intersample_interval=5, hold_time=179): # fixate_time=50, ):
+    def generate_batch(self, batch_size, n_samples=75, intersample_interval=5, hold_time=179):
         '''
         Generates a batch of data using a Noisy-OR model and the compositional query format.
         Input shape: [seq_len, batch_size, 3 * n_nodes]
@@ -271,7 +271,6 @@ class TanhRNN(nn.Module):
         n_nodes = self.n_nodes
         seq_len = (n_samples - 1) * intersample_interval + 1
         input_dim = n_nodes * 3
-        # full_duration = fixate_time + seq_len + hold_time
         full_duration = seq_len + hold_time
         
         labels = np.zeros(batch_size, dtype=np.float32)
